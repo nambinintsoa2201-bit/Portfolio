@@ -17,10 +17,9 @@ export default async function handler(req: any, res: any) {
     const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
 
     if (!accessKey) {
-      console.error('Missing WEB3FORMS_ACCESS_KEY environment variable');
       return res.status(500).json({ 
         success: false, 
-        message: 'Clé API manquante (WEB3FORMS_ACCESS_KEY). Veuillez l\'ajouter dans les réglages Vercel.' 
+        message: 'Clé API manquante (WEB3FORMS_ACCESS_KEY) dans Vercel.' 
       });
     }
     
@@ -38,7 +37,19 @@ export default async function handler(req: any, res: any) {
       body: JSON.stringify(payload),
     });
 
-    const data = await response.json();
+    const contentType = response.headers.get("content-type");
+    let data;
+
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();
+    } else {
+      const errorText = await response.text();
+      return res.status(response.status).json({
+        success: false,
+        message: 'Web3Forms a renvoyé un format inattendu.',
+        error: errorText.substring(0, 200)
+      });
+    }
     
     if (!response.ok) {
       return res.status(response.status).json({
@@ -53,7 +64,7 @@ export default async function handler(req: any, res: any) {
     console.error('Proxy Error:', error);
     return res.status(500).json({ 
       success: false, 
-      message: 'Erreur de connexion au serveur proxy.',
+      message: 'Erreur interne du proxy.',
       error: error.message 
     });
   }
