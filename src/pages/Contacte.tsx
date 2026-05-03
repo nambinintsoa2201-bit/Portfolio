@@ -40,15 +40,15 @@ export default function Contact() {
         body: JSON.stringify(dataObj)
       });
 
-      // Robust response check
-      const contentType = response.headers.get("content-type");
+      // Infallible method: Read as text first to avoid 'Unexpected end of JSON input'
+      const rawText = await response.text();
       let data;
       
-      if (contentType && contentType.includes("application/json")) {
-        data = await response.json();
-      } else {
-        const textError = await response.text();
-        throw new Error(textError || "Server returned non-JSON response");
+      try {
+        data = rawText ? JSON.parse(rawText) : { success: response.ok };
+      } catch (e) {
+        console.error("JSON Parse Error:", e, "Raw Text:", rawText);
+        data = { success: false, message: "Server returned malformed response" };
       }
 
       if (data.success) {
