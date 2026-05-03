@@ -1,4 +1,4 @@
-export default async function handler(req: any, res: any) {
+export default async function handler(req, res) {
   // 1. Handle CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -14,10 +14,8 @@ export default async function handler(req: any, res: any) {
 
   try {
     const body = req.body;
-    
-    // Bypass TypeScript 'process' check by using global object
-    const env = (global as any).process.env;
-    const accessKey = env.WEB3FORMS_ACCESS_KEY;
+    // In pure JS, we can use process.env without any TypeScript errors
+    const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
 
     if (!accessKey) {
       return res.status(500).json({ 
@@ -63,7 +61,7 @@ export default async function handler(req: any, res: any) {
     }
 
     return res.status(200).json(data);
-  } catch (error: any) {
+  } catch (error) {
     console.error('Proxy Error:', error);
     return res.status(500).json({ 
       success: false, 
