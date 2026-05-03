@@ -33,7 +33,9 @@ export default async function handler(req, res) {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        // Add a browser User-Agent to bypass Cloudflare challenge on Web3Forms
+        // Spoof origin and referer to match the authorized domain
+        'Origin': 'https://portfolio-three-blue-23.vercel.app',
+        'Referer': 'https://portfolio-three-blue-23.vercel.app/',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
       },
       body: JSON.stringify(payload),
@@ -46,7 +48,6 @@ export default async function handler(req, res) {
       data = await response.json();
     } else {
       const errorText = await response.text();
-      // More helpful message for the user
       if (errorText.includes("Just a moment") || response.status === 403) {
         return res.status(response.status).json({
           success: false,
