@@ -14,7 +14,10 @@ export default async function handler(req: any, res: any) {
 
   try {
     const body = req.body;
-    const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
+    
+    // Bypass TypeScript 'process' check by using global object
+    const env = (global as any).process.env;
+    const accessKey = env.WEB3FORMS_ACCESS_KEY;
 
     if (!accessKey) {
       return res.status(500).json({ 
