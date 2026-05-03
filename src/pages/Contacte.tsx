@@ -66,7 +66,7 @@ export default function Contact() {
   const socials = [
     { icon: <GithubIcon size={20} />, label: 'GitHub', href: 'https://github.com/nambinintsoa2201-bit', value: 'nambinintsoa2201-bit' },
     { icon: <Mail size={20} />, label: 'Email', href: 'mailto:nambinintsoa2201@gmail.com', value: 'nambinintsoa2201@gmail.com' },
-    { icon: <LinkedinIcon size={20} />, label: 'LinkedIn', href: 'https://www.linkedin.com/in/nomenjanahary-nambinintsoa', value: 'Nomenjanahary Nambinintsoa Gilbert' },
+    { icon: <LinkedinIcon size={20} />, label: 'LinkedIn', href: 'https://www.linkedin.com/in/nomenjanahary-nambinintsoa-gilbert', value: 'Nomenjanahary Nambinintsoa Gilbert' },
     { icon: <MapPin size={20} />, label: 'Localisation', href: '#', value: 'Madagascar' },
   ];
 
