@@ -1,6 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useMemo } from 'react';
-import { GraduationCap, Shield, Server, Code2, Cpu, Download } from 'lucide-react';
+import { GraduationCap, Shield, Server, Code2, Cpu } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 function Fade({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
@@ -60,31 +60,6 @@ export default function About() {
               <p style={{ fontSize: 15, lineHeight: 1.8, color: 'var(--text-secondary)', marginBottom: 28 }}>
                 {t('about.desc2')}
               </p>
-
-              <motion.a
-                href="/assets/CV.pdf"
-                download
-                whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(0,240,255,0.2)' }}
-                whileTap={{ scale: 0.95 }}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 10,
-                  padding: '12px 24px',
-                  borderRadius: 12,
-                  background: 'rgba(0,240,255,0.05)',
-                  border: '1px solid rgba(0,240,255,0.2)',
-                  color: 'var(--accent-cyan)',
-                  fontSize: 14,
-                  fontWeight: 600,
-                  textDecoration: 'none',
-                  marginBottom: 32,
-                  transition: 'all 0.3s'
-                }}
-              >
-                <Download size={18} />
-                {t('home.btnCV')}
-              </motion.a>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
                 {highlights.map((h) => (
                   <motion.div key={h.label} whileHover={{ scale: 1.05, borderColor: h.color }} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 16px', borderRadius: 12, border: '1px solid var(--border-subtle)', background: 'rgba(255,255,255,0.02)', color: h.color, fontSize: 13, fontWeight: 500, cursor: 'default', transition: 'all 0.3s' }}>
