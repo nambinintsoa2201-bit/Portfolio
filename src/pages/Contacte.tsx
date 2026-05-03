@@ -17,8 +17,13 @@ export default function Contact() {
     setLoading(true);
     setError('');
 
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
+    // Web3Forms Access Key
     formData.append("access_key", "36460a2f-a2a7-4501-8785-b299c655d514");
+    formData.append("from_name", "Portfolio Visitor");
+    formData.append("subject", "New Message from Portfolio");
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -33,14 +38,14 @@ export default function Contact() {
 
       if (data.success) {
         setSent(true);
-        e.currentTarget.reset();
+        form.reset();
         setTimeout(() => setSent(false), 5000);
       } else {
         console.error("Web3Forms Error:", data);
         setError(data.message || t('contact.errSend'));
       }
     } catch (err) {
-      console.error("Network Error:", err);
+      console.error("Submission Error:", err);
       setError(t('contact.errNetwork'));
     }
     setLoading(false);
