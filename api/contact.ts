@@ -4,7 +4,6 @@ export default async function handler(req: any, res: any) {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  // 2. Handle preflight request (OPTIONS)
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
@@ -15,11 +14,20 @@ export default async function handler(req: any, res: any) {
 
   try {
     const body = req.body;
+    const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
+
+    // Check if the environment variable is set
+    if (!accessKey) {
+      console.error('Missing WEB3FORMS_ACCESS_KEY environment variable');
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Clé API manquante (WEB3FORMS_ACCESS_KEY). Veuillez l\'ajouter dans les réglages Vercel.' 
+      });
+    }
     
-    // Inject the access key from environment variables for security
     const payload = {
       ...body,
-      access_key: process.env.WEB3FORMS_ACCESS_KEY
+      access_key: accessKey
     };
 
     const response = await fetch('https://api.web3forms.com/submit', {
@@ -32,9 +40,23 @@ export default async function handler(req: any, res: any) {
     });
 
     const data = await response.json();
-    return res.status(response.status).json(data);
-  } catch (error) {
+    
+    // In case of domain error or other Web3Forms error
+    if (!response.ok) {
+      return res.status(response.status).json({
+        success: false,
+        message: data.message || 'Erreur Web3Forms',
+        debug: data
+      });
+    }
+
+    return res.status(200).json(data);
+  } catch (error: any) {
     console.error('Proxy Error:', error);
-    return res.status(500).json({ success: false, message: 'Server Connection Error' });
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Erreur de connexion au serveur proxy.',
+      error: error.message 
+    });
   }
 }
