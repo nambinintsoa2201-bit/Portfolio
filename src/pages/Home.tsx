@@ -234,7 +234,7 @@ export default function Home() {
           </motion.a>
 
           <motion.a
-            href="/CV_Nomenjanahary_Nambinintsoa_Gilbert.pdf"
+            href="/CV.pdf"
             download
             whileHover={{ scale: 1.05, borderColor: 'var(--accent-green)', color: 'var(--accent-green)' }}
             whileTap={{ scale: 0.97 }}
