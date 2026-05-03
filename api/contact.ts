@@ -14,6 +14,9 @@ export default async function handler(req: any, res: any) {
 
   try {
     const body = req.body;
+    
+    // Use @ts-ignore to bypass TypeScript check for 'process' in browser-focused projects
+    // @ts-ignore
     const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
 
     // Check if the environment variable is set
@@ -41,7 +44,6 @@ export default async function handler(req: any, res: any) {
 
     const data = await response.json();
     
-    // In case of domain error or other Web3Forms error
     if (!response.ok) {
       return res.status(response.status).json({
         success: false,
