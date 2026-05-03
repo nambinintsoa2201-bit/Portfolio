@@ -20,36 +20,19 @@ export default function Contact() {
     const form = e.currentTarget;
     const formData = new FormData(form);
     
-    // Web3Forms direct payload
-    const dataObj: any = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      message: formData.get('message'),
-      access_key: "36460a2f-a2a7-4501-8785-b299c655d514", // Hardcoded key for client-side use
-      from_name: "Portfolio Contact Form",
-      subject: `New Message from ${formData.get('name') || 'Visitor'}`
-    };
+    // Use FormData for better compatibility with Web3Forms
+    formData.append("access_key", "36460a2f-a2a7-4501-8785-b299c655d514");
+    formData.append("from_name", "Portfolio Contact Form");
+    formData.append("subject", `New Message from ${formData.get('name') || 'Visitor'}`);
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify(dataObj)
+        body: formData
       });
 
-      // Infallible method: Read as text first to avoid 'Unexpected end of JSON input'
-      const rawText = await response.text();
-      let data;
-      
-      try {
-        data = rawText ? JSON.parse(rawText) : { success: response.ok };
-      } catch (e) {
-        console.error("JSON Parse Error:", e, "Raw Text:", rawText);
-        data = { success: false, message: "Server returned malformed response" };
-      }
+      // Simple response handling as FormData submissions are very stable
+      const data = await response.json();
 
       if (data.success) {
         setSent(true);
