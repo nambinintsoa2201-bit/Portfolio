@@ -20,12 +20,11 @@ export default function Contact() {
     const form = e.currentTarget;
     const formData = new FormData(form);
     
-    // Explicitly build the data object
+    // Build the data object (access_key is now handled server-side)
     const dataObj: any = {
       name: formData.get('name'),
       email: formData.get('email'),
       message: formData.get('message'),
-      access_key: "36460a2f-a2a7-4501-8785-b299c655d514",
       from_name: "Portfolio Contact Form",
       subject: `New Message from ${formData.get('name') || 'Visitor'}`
     };

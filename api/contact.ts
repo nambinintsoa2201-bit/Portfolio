@@ -6,13 +6,19 @@ export default async function handler(req: any, res: any) {
   try {
     const body = req.body;
     
+    // Inject the access key from environment variables for security
+    const payload = {
+      ...body,
+      access_key: process.env.WEB3FORMS_ACCESS_KEY
+    };
+
     const response = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(payload),
     });
 
     const data = await response.json();
