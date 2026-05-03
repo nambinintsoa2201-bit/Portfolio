@@ -14,7 +14,6 @@ export default async function handler(req, res) {
 
   try {
     const body = req.body;
-    // In pure JS, we can use process.env without any TypeScript errors
     const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
 
     if (!accessKey) {
@@ -34,6 +33,8 @@ export default async function handler(req, res) {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        // Add a browser User-Agent to bypass Cloudflare challenge on Web3Forms
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
       },
       body: JSON.stringify(payload),
     });
@@ -45,10 +46,18 @@ export default async function handler(req, res) {
       data = await response.json();
     } else {
       const errorText = await response.text();
+      // More helpful message for the user
+      if (errorText.includes("Just a moment") || response.status === 403) {
+        return res.status(response.status).json({
+          success: false,
+          message: "Web3Forms bloque la connexion depuis Vercel. Veuillez vérifier l'autorisation du domaine sur votre tableau de bord Web3Forms.",
+          error: "Cloudflare/403 Blocked"
+        });
+      }
       return res.status(response.status).json({
         success: false,
         message: 'Web3Forms a renvoyé un format inattendu.',
-        error: errorText.substring(0, 200)
+        error: errorText.substring(0, 100)
       });
     }
     
