@@ -83,8 +83,8 @@ export const translations = {
       btnSend: 'Envoyer',
       btnSent: 'Envoyé !',
       btnSending: 'Envoi en cours...',
-      errNetwork: 'Erreur réseau. Si vous utilisez un bloqueur de pubs (AdBlock, Brave), essayez de le désactiver.',
-      errSend: "Erreur lors de l'envoi."
+      errNetwork: "Une erreur de connexion est survenue. Veuillez réessayer dans quelques instants.",
+      errSend: "Impossible d'envoyer le message pour le moment. Vous pouvez aussi me contacter directement par email."
     }
   },
   en: {
@@ -169,8 +169,8 @@ export const translations = {
       btnSend: 'Send',
       btnSent: 'Sent!',
       btnSending: 'Sending...',
-      errNetwork: 'Network error. If you use an adblocker (AdBlock, Brave), try disabling it.',
-      errSend: "Error while sending."
+      errNetwork: "A connection error occurred. Please try again in a few moments.",
+      errSend: "Unable to send the message at the moment. You can also contact me directly via email."
     }
   }
 };

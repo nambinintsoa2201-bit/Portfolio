@@ -20,35 +20,51 @@ export default function Contact() {
     const form = e.currentTarget;
     const formData = new FormData(form);
     
-    // Web3Forms Access Key
-    formData.append("access_key", "36460a2f-a2a7-4501-8785-b299c655d514");
-    formData.append("from_name", "Portfolio Visitor");
-    formData.append("subject", "New Message from Portfolio");
+    // Prepare data as JSON
+    const dataObj = Object.fromEntries(formData.entries());
+    dataObj.access_key = "36460a2f-a2a7-4501-8785-b299c655d514";
+    dataObj.from_name = "Portfolio Contact Form";
+    dataObj.subject = `New Message from ${dataObj.name || 'Visitor'}`;
+
+    // Robust retry logic
+    const sendWithRetry = async (retries = 2): Promise<void> => {
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(dataObj)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          setSent(true);
+          form.reset();
+          setTimeout(() => setSent(false), 5000);
+        } else {
+          throw new Error(data.message || t('contact.errSend'));
+        }
+      } catch (err: any) {
+        if (retries > 0) {
+          // Exponential backoff or simple delay
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          return sendWithRetry(retries - 1);
+        }
+        throw err;
+      }
+    };
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Accept": "application/json"
-        },
-        body: formData
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setSent(true);
-        form.reset();
-        setTimeout(() => setSent(false), 5000);
-      } else {
-        console.error("Web3Forms Error:", data);
-        setError(data.message || t('contact.errSend'));
-      }
-    } catch (err) {
-      console.error("Submission Error:", err);
-      setError(t('contact.errNetwork'));
+      await sendWithRetry();
+    } catch (err: any) {
+      console.error("Submission Failure:", err);
+      setError(err.message || t('contact.errNetwork'));
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const inputStyle: React.CSSProperties = {
