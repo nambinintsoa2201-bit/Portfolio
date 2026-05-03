@@ -1,19 +1,11 @@
-export const config = {
-  runtime: 'edge',
-};
-
-export default async function handler(req: Request) {
+export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ success: false, message: 'Method Not Allowed' }), { 
-      status: 405,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return res.status(405).json({ success: false, message: 'Method Not Allowed' });
   }
 
   try {
-    const body = await req.json();
+    const body = req.body;
     
-    // Server-side call to Web3Forms (bypass adblockers)
     const response = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: {
@@ -24,16 +16,9 @@ export default async function handler(req: Request) {
     });
 
     const data = await response.json();
-    
-    return new Response(JSON.stringify(data), {
-      status: response.status,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(response.status).json(data);
   } catch (error) {
     console.error('Proxy Error:', error);
-    return new Response(JSON.stringify({ success: false, message: 'Server Connection Error' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(500).json({ success: false, message: 'Server Connection Error' });
   }
 }

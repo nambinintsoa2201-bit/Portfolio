@@ -20,11 +20,15 @@ export default function Contact() {
     const form = e.currentTarget;
     const formData = new FormData(form);
     
-    // Prepare data as JSON
-    const dataObj = Object.fromEntries(formData.entries());
-    dataObj.access_key = "36460a2f-a2a7-4501-8785-b299c655d514";
-    dataObj.from_name = "Portfolio Contact Form";
-    dataObj.subject = `New Message from ${dataObj.name || 'Visitor'}`;
+    // Explicitly build the data object
+    const dataObj: any = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      message: formData.get('message'),
+      access_key: "36460a2f-a2a7-4501-8785-b299c655d514",
+      from_name: "Portfolio Contact Form",
+      subject: `New Message from ${formData.get('name') || 'Visitor'}`
+    };
 
     // Robust retry logic
     const sendWithRetry = async (retries = 2): Promise<void> => {
