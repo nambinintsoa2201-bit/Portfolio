@@ -105,7 +105,7 @@ export default function Home() {
         >
           <img 
             src={profileImg} 
-            alt="Nomenjanahary Nambinintsoa Gilbert"
+            alt="Nomenajanahary Nambinintsoa Gilbert"
             style={{
               width: 180,
               height: 180,
@@ -157,7 +157,7 @@ export default function Home() {
           }}
         >
           {t('home.greeting')}{' '}
-          <span className="gradient-text">Nomenjanahary Nambinintsoa Gilbert</span>
+          <span className="gradient-text">Nomenajanahary Nambinintsoa Gilbert</span>
         </motion.h1>
 
         {/* Typing effect */}
