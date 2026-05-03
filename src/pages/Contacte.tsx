@@ -40,7 +40,16 @@ export default function Contact() {
         body: JSON.stringify(dataObj)
       });
 
-      const data = await response.json();
+      // Robust response check
+      const contentType = response.headers.get("content-type");
+      let data;
+      
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        const textError = await response.text();
+        throw new Error(textError || "Server returned non-JSON response");
+      }
 
       if (data.success) {
         setSent(true);
