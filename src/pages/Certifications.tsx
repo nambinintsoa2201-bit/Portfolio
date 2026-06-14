@@ -5,6 +5,12 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 const certifications = [
   {
+    title: 'Introduction to the Threat Landscape 3.0',
+    issuer: 'Fortinet',
+    color: 'var(--accent-pink)',
+    url: 'https://www.credly.com/badges/d9569df2-3679-43c8-b2d5-d638d89e6269/public_url',
+  },
+  {
     title: 'ISC2 Candidate',
     issuer: 'ISC2',
     color: 'var(--accent-cyan)',
